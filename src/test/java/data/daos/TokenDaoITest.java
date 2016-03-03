@@ -1,7 +1,8 @@
 package data.daos;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
+
+import java.util.Calendar;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,19 @@ public class TokenDaoITest {
         User user = (User) daosService.getMap().get("u4");
         assertEquals(token, tokenDao.findByUser(token.getUser()));
         assertNull(tokenDao.findByUser(user));
+    }
+    
+    @Test
+    public void testDeleteAllTokenExpired(){
+        User user = (User) daosService.getMap().get("u4");
+    	Token token = new Token(user);
+    	assert tokenDao.findByUser(token.getUser()) !=null;
+    	Calendar date = Calendar.getInstance();
+        date.set(2016, Calendar.MARCH, 01);
+    	token.setCreatedDate(date);
+    	tokenDao.deleteAllTokenExpired();
+    	assertNull(tokenDao.findByUser(token.getUser()));
+    	
     }
 
 }
