@@ -1,5 +1,6 @@
 package data.entities;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,12 +19,15 @@ public class Token {
 
     @Column(unique = true, nullable = false)
     private String value;
-
+    
+    @Column(nullable = false)
+    private Calendar createdDate;
+    
     @ManyToOne
     @JoinColumn
     private User user;
 
-    public Token() {
+	public Token() {
     }
 
     public Token(User user) {
@@ -31,6 +35,7 @@ public class Token {
         this.user = user;
         this.value = new Encrypt().encryptInBase64UrlSafe("" + user.getId() + user.getUsername() + Long.toString(new Date().getTime())
                 + user.getPassword());
+        this.createdDate = Calendar.getInstance();
     }
 
     public int getId() {
@@ -44,6 +49,14 @@ public class Token {
     public User getUser() {
         return user;
     }
+    
+	public Calendar getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Calendar date) {
+		this.createdDate = date;
+	}
 
     @Override
     public int hashCode() {
@@ -65,7 +78,15 @@ public class Token {
     }
 
     @Override
-    public String toString() {
-        return "Token [id=" + id + ", value=" + value + ", userId=" + user.getId() + "]";
+	public String toString() {
+		return "Token [id=" + id + ", value=" + value + ", createdDate=" + createdDate + ", user=" + user + "]";
+	}
+    
+    public boolean isValid()
+    {
+    	if ((Calendar.getInstance().getTimeInMillis()-createdDate.getTimeInMillis())<3600000)
+    		return true;
+    	else
+    		return false;
     }
 }
