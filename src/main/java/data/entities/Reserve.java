@@ -25,15 +25,18 @@ public class Reserve {
     private User user;
 
     private Calendar date;
+    
+    private int numPeople;
 
-    public Reserve(Court court, User user, Calendar date) {
+    public Reserve(Court court, User user, Calendar date, int people) {
         this.court = court;
         this.user = user;
         this.date = date;
+        this.numPeople = people;
     }
 
     public Reserve(Court court, Calendar date) {
-        this(court, null, date);
+        this(court, null, date, 2);
     }
 
     public Reserve() {
@@ -81,7 +84,7 @@ public class Reserve {
     @Override
     public String toString() {
         String time = new SimpleDateFormat("HH:00 dd-MMM-yyyy ").format(date.getTime());
-        return "Reserve [id=" + id + ", courtId=" + court.getId() + ", date=" + time + "]";
+        return "Reserve [id=" + id + ", courtId=" + court.getId() + ", date=" + time + ", people=" + numPeople + "]";
     }
 
 }
