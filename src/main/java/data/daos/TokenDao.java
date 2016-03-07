@@ -12,6 +12,6 @@ public interface TokenDao extends JpaRepository<Token, Integer>, TokenExtended {
 
     Token findByUser(User user);
 
-    @Query(value="select * from Token where createdDate.isValid()=true", nativeQuery=true)
+    @Query(value="select * from Token where createdDate.isValid()=false", nativeQuery=true)
     List<Token> findAllTokenExpired();
 }
