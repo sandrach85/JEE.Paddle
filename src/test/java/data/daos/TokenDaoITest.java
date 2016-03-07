@@ -37,7 +37,6 @@ public class TokenDaoITest {
     public void testDeleteAllTokenExpired(){
         User user = (User) daosService.getMap().get("u4");
     	Token token = new Token(user);
-    	assertTrue(tokenDao.findByUser(token.getUser())!=null);
     	Calendar date = Calendar.getInstance();
         date.set(2016, Calendar.MARCH, 01);
     	token.setCreatedDate(date);

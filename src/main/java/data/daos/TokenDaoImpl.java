@@ -1,7 +1,11 @@
 package data.daos;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import data.entities.Token;
 
 
 @Repository
@@ -12,7 +16,13 @@ public class TokenDaoImpl implements TokenExtended{
 	
 	@Override
 	public void deleteAllTokenExpired(){
-		tokenDao.findAllTokenExpired();
-		tokenDao.deleteAll();
+		List<Token> listToken=tokenDao.findAllToken();
+		//tokenDao.findAllToken();
+		for (int i=0; i<listToken.size(); i++){
+			if (!listToken.get(i).isValid()){
+				tokenDao.delete(i);				
+			}
+		}
+		//tokenDao.deleteAll();
 	}
 }
