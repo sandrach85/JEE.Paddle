@@ -17,12 +17,10 @@ public class TokenDaoImpl implements TokenExtended{
 	@Override
 	public void deleteAllTokenExpired(){
 		List<Token> listToken=tokenDao.findAllToken();
-		//tokenDao.findAllToken();
 		for (int i=0; i<listToken.size(); i++){
 			if (!listToken.get(i).isValid()){
 				tokenDao.delete(i);				
 			}
 		}
-		//tokenDao.deleteAll();
 	}
 }
