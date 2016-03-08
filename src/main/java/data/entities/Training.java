@@ -1,11 +1,13 @@
 package data.entities;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 
@@ -23,10 +25,11 @@ public class Training {
     @ManyToOne
     @JoinColumn
     private Court court;
+
+    private User trainer;
     
-    @ManyToOne
-    @JoinColumn
-    private User user;
+    @ManyToMany
+    private List<User> users;
     
     @ManyToOne
     @JoinColumn
@@ -38,6 +41,7 @@ public class Training {
 		this.dateIni = dateIni;
 		this.dateEnd = dateEnd;
 		this.court = court;
+		createReserves(dateIni, dateEnd, court);
 	}
 
 	public Calendar getDateIni() {
@@ -65,11 +69,11 @@ public class Training {
 	}
 
 	public User getUser() {
-		return user;
+		return trainer;
 	}
 
 	public void setUser(User user) {
-		this.user = user;
+		this.trainer = user;
 	}
 
 	public Reserve getReserve() {
@@ -120,10 +124,10 @@ public class Training {
 				return false;
 		} else if (!reserve.equals(other.reserve))
 			return false;
-		if (user == null) {
-			if (other.user != null)
+		if (trainer == null) {
+			if (other.trainer != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} else if (!trainer.equals(other.trainer))
 			return false;
 		return true;
 	}
@@ -131,33 +135,21 @@ public class Training {
 	@Override
 	public String toString() {
 		return "Training [id=" + id + ", dateIni=" + dateIni + ", dateEnd=" + dateEnd + ", court=" + court + ", user="
-				+ user + ", reserve=" + reserve + "]";
+				+ trainer + ", reserve=" + reserve + "]";
 	}
-
 
 	public void createReserves(Calendar dateI, Calendar dateE, Court court){
-		int yearI = dateI.get(Calendar.YEAR);
-		int monthI = dateI.get(Calendar.MONTH); 
-		int day = dateI.get(Calendar.DAY_OF_MONTH);
-		int week = dateI.get(Calendar.WEEK_OF_YEAR);
-		int hour = dateI.get(Calendar.HOUR_OF_DAY);
-		int minutes = dateI.get(Calendar.MINUTE);
-		int yearE = dateE.get(Calendar.YEAR);
-		int monthE = dateE.get(Calendar.MONTH);
-		int dayE = dateE.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-		Calendar dateAux;
+		long dateMilis = dateI.getTimeInMillis();
+		long weekAdd = 1000*60*60*24*7;
+		Calendar dateAdd=dateI;
 		
 		for (int i=0; i<daysBetweenDates(dateI,dateE);i++){
-			//desplazar el mes
-			dateAux.set(yearI, monthI, day+(i*6), hour, minutes);
-			//poner trainer como user
-			reserve= new Reserve(court, user., dateAux);
+			dateAdd.setTimeInMillis(dateMilis+(weekAdd*i));
+			reserve= new Reserve(court, trainer, dateAdd);
 		}
-		
-		
 	}
 	
-	private int daysBetweenDates(Calendar dateI, Calendar dateE){
+	public int daysBetweenDates(Calendar dateI, Calendar dateE){
 		long milisec = dateE.getTimeInMillis()-dateI.getTimeInMillis();
 		int days = (int) milisec/1000/60/60/24;
 		return days;

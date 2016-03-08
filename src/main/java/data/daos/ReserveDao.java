@@ -13,4 +13,5 @@ public interface ReserveDao extends JpaRepository<Reserve, Integer> {
     List<Reserve> findByDateBetween(Calendar date1, Calendar date2);
 
     Reserve findByCourtAndDate(Court court, Calendar date);
+  
 }

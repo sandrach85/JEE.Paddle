@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import data.entities.Token;
 import data.entities.Training;
 
-public interface TrainingDao  extends JpaRepository<Token, Integer> {
+public interface TrainingDao  extends JpaRepository<Token, Integer>, TrainingExtended {
 
 	@Query(value="select * from Training", nativeQuery=true)
 	List<Training> findAllTraining();
@@ -16,7 +16,9 @@ public interface TrainingDao  extends JpaRepository<Token, Integer> {
 	@Query("delete t.user from Training t where t.user= ?1")
 	void deleteUser(int id);
 	
-	
 	Training findById(int id);
+	
+	@Query("delete t from Training t where t.id= ?1")
+	void deleteTraining(int id);
 	
 }
