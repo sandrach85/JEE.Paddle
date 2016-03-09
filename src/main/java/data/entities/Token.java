@@ -1,5 +1,6 @@
 package data.entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -79,7 +80,8 @@ public class Token {
 
     @Override
 	public String toString() {
-		return "Token [id=" + id + ", value=" + value + ", createdDate=" + createdDate + ", user=" + user + "]";
+        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(createdDate.getTime());
+		return "Token [id=" + id + ", value=" + value + ", createdDate=" + date + ", user=" + user + "]";
 	}
     
     public boolean isValid()
