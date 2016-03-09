@@ -40,6 +40,7 @@ public class TokenDaoITest {
     	Calendar date = Calendar.getInstance();
         date.set(2016, Calendar.MARCH, 01);
     	token.setCreatedDate(date);
+    	tokenDao.save(token);
     	tokenDao.deleteAllTokenExpired();
     	assertNull(tokenDao.findByUser(token.getUser()));
     	
