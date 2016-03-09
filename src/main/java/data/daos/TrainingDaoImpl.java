@@ -1,20 +1,39 @@
 package data.daos;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import data.entities.Reserve;
 import data.entities.Training;
+import data.entities.User;
 
 @Repository
 public class TrainingDaoImpl implements TrainingExtended{
 	
 	@Autowired
 	private TrainingDao trainingDao;
+	@Autowired
 	private ReserveDao reserveDao;
-
+	
+	@Override
+	public void deleteUserTraining(int idT, int idU) {
+		List<User> listUsers = trainingDao.findUsersTraining(idT);
+		Training training = trainingDao.findById(idT);
+		for(int i=0; i<listUsers.size();i++){
+			if (listUsers.get(i).getId()==idU){
+				listUsers.remove(i);
+				training.setUsers(listUsers);
+				trainingDao.delete(i);
+				//trainingDao.save(training);
+			}
+		}
+		
+	}
+	
+	
 	@Override
 	public void deleteTrainingAndReserves(int id) {
 		Training training = trainingDao.findById(id);
@@ -27,7 +46,9 @@ public class TrainingDaoImpl implements TrainingExtended{
 				reserve = reserveDao.findByCourtAndDate(training.getCourt(), dateDel);
 				reserveDao.delete(reserve);				
 		}
-		trainingDao.deleteTraining(training.getId());
+		//trainingDao.deleteTraining(training.getId());
 	}
+
+	
 
 }

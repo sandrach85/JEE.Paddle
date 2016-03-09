@@ -1,47 +1,47 @@
 package data.entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-
 @Entity
 public class Training {
-    
-    @Id
-    @GeneratedValue
-    private int id;
-    
-    private Calendar dateIni;
-    
-    private Calendar dateEnd;
-    
-    @ManyToOne
-    @JoinColumn
-    private Court court;
 
-    private User trainer;
-    
-    @ManyToMany
-    private List<User> users;
-    
-    @ManyToOne
-    @JoinColumn
-    private Reserve reserve;
+	@Id
+	@GeneratedValue
+	private int id;
 
-	public Training(int id, Calendar dateIni, Calendar dateEnd, Court court) {
+	private Calendar dateIni;
+
+	private Calendar dateEnd;
+
+	@ManyToOne
+	@JoinColumn
+	private Court court;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<User> users;
+
+	@ManyToOne
+	@JoinColumn
+	private Reserve reserve;
+
+	public Training() {
+	}
+
+	public Training(Calendar dateIni, Calendar dateEnd, Court court) {
 		super();
-		this.id = id;
 		this.dateIni = dateIni;
 		this.dateEnd = dateEnd;
 		this.court = court;
-		createReserves(dateIni, dateEnd, court);
 	}
 
 	public Calendar getDateIni() {
@@ -68,12 +68,12 @@ public class Training {
 		this.court = court;
 	}
 
-	public User getUser() {
-		return trainer;
+	public List<User> getUsers() {
+		return users;
 	}
 
-	public void setUser(User user) {
-		this.trainer = user;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public Reserve getReserve() {
@@ -124,35 +124,37 @@ public class Training {
 				return false;
 		} else if (!reserve.equals(other.reserve))
 			return false;
-		if (trainer == null) {
-			if (other.trainer != null)
+		if (users == null) {
+			if (other.users != null)
 				return false;
-		} else if (!trainer.equals(other.trainer))
+		} else if (!users.equals(other.users))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Training [id=" + id + ", dateIni=" + dateIni + ", dateEnd=" + dateEnd + ", court=" + court + ", user="
-				+ trainer + ", reserve=" + reserve + "]";
+        String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
+        String dateE = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
+		return "Training [id=" + id + ", dateIni=" + dateI + ", dateEnd=" + dateE + ", court=" + court
+				+ ", users=" + users + ", reserve=" + reserve + "]";
 	}
 
-	public void createReserves(Calendar dateI, Calendar dateE, Court court){
+	public void createReserves(Calendar dateI, Calendar dateE, Court court) {
 		long dateMilis = dateI.getTimeInMillis();
-		long weekAdd = 1000*60*60*24*7;
-		Calendar dateAdd=dateI;
-		
-		for (int i=0; i<daysBetweenDates(dateI,dateE);i++){
-			dateAdd.setTimeInMillis(dateMilis+(weekAdd*i));
-			reserve= new Reserve(court, trainer, dateAdd);
+		long weekAdd = 1000 * 60 * 60 * 24 * 7;
+		Calendar dateAdd = dateI;
+
+		for (int i = 0; i < daysBetweenDates(dateI, dateE); i++) {
+			dateAdd.setTimeInMillis(dateMilis + (weekAdd * i));
+			reserve = new Reserve(court, dateAdd);
 		}
 	}
-	
-	public int daysBetweenDates(Calendar dateI, Calendar dateE){
-		long milisec = dateE.getTimeInMillis()-dateI.getTimeInMillis();
-		int days = (int) milisec/1000/60/60/24;
+
+	public int daysBetweenDates(Calendar dateI, Calendar dateE) {
+		long milisec = dateE.getTimeInMillis() - dateI.getTimeInMillis();
+		int days = (int) milisec / 1000 / 60 / 60 / 24;
 		return days;
 	}
-    
+
 }
