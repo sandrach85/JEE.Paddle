@@ -24,13 +24,10 @@ public class TrainingDaoImpl implements TrainingExtended{
 		Training training = trainingDao.findById(idT);
 		for(int i=0; i<listUsers.size();i++){
 			if (listUsers.get(i).getId()==idU){
-				listUsers.remove(i);
-				training.setUsers(listUsers);
-				trainingDao.delete(i);
-				//trainingDao.save(training);
+				training.deleteUser(idU);
+				trainingDao.save(training);
 			}
 		}
-		
 	}
 	
 	
@@ -46,7 +43,7 @@ public class TrainingDaoImpl implements TrainingExtended{
 				reserve = reserveDao.findByCourtAndDate(training.getCourt(), dateDel);
 				reserveDao.delete(reserve);				
 		}
-		//trainingDao.deleteTraining(training.getId());
+		trainingDao.delete(training.getId());
 	}
 
 	

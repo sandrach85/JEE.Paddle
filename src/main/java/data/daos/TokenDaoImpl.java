@@ -19,9 +19,7 @@ public class TokenDaoImpl implements TokenExtended{
 		List<Token> listToken=tokenDao.findAllToken();
 		for (int i=0; i<listToken.size(); i++){
 			if (!listToken.get(i).isValid()){
-				listToken.remove(listToken.get(i));
-				tokenDao.deleteAll();
-				tokenDao.save(listToken);
+				tokenDao.delete(listToken.get(i));
 			}
 		}
 	}

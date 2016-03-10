@@ -16,6 +16,7 @@ import data.entities.Court;
 import data.entities.Reserve;
 import data.entities.Role;
 import data.entities.Token;
+import data.entities.Training;
 import data.entities.User;
 import data.services.GenericService;
 
@@ -66,14 +67,30 @@ public class DaosService {
             date.add(Calendar.HOUR_OF_DAY, 1);
             reserveDao.save(new Reserve(courtDao.findOne(i+1), users[i], date));
         }
+       // for (Training training : this.createTraining()){
+        //	map.put(training.get)
+        //}
     }
-
+    
+    
+    public Training[] createTraining (int initial, int size){
+    	Training[] training = new Training[size];
+    	Court[] court;
+    	User[] user;
+    	for (int i =0; i < size; i++){
+    		training[i] = new Training(Calendar.getInstance(),(Calendar.getInstance()),court[i],user[i+4]);
+    	}
+    }
+   
     public User[] createPlayers(int initial, int size) {
-        User[] users = new User[size];
+        User[] users = new User[size + 4];
         for (int i = 0; i < size; i++) {
             users[i] = new User("u" + (i + initial), "u" + (i + initial) + "@gmail.com", "p", Calendar.getInstance());
             userDao.save(users[i]);
             authorizationDao.save(new Authorization(users[i], Role.PLAYER));
+            users[i+4] = new User("u" + (i+4 + initial), "u" + (i+4 + initial) + "@gmail.com", "p", Calendar.getInstance());            
+            userDao.save(users[i+4]);
+            authorizationDao.save(new Authorization(users[i+4], Role.TRAINER));
         }
         return users;
     }

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Training {
@@ -26,6 +27,10 @@ public class Training {
 	@ManyToOne
 	@JoinColumn
 	private Court court;
+	
+	@OneToOne
+	@JoinColumn
+	private User trainer;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<User> users;
@@ -37,11 +42,13 @@ public class Training {
 	public Training() {
 	}
 
-	public Training(Calendar dateIni, Calendar dateEnd, Court court) {
+	public Training(Calendar dateIni, Calendar dateEnd, Court court, User trainer) {
 		super();
 		this.dateIni = dateIni;
 		this.dateEnd = dateEnd;
 		this.court = court;
+		this.trainer = trainer;
+		createReserves(dateIni,dateEnd, court);
 	}
 
 	public Calendar getDateIni() {
@@ -87,7 +94,18 @@ public class Training {
 	public int getId() {
 		return id;
 	}
+	
+	
 
+	public User getTrainer() {
+		return trainer;
+	}
+
+	public void setTrainer(User trainer) {
+		this.trainer = trainer;
+	}
+
+	
 	@Override
 	public int hashCode() {
 		return id;
@@ -124,6 +142,11 @@ public class Training {
 				return false;
 		} else if (!reserve.equals(other.reserve))
 			return false;
+		if (trainer == null) {
+			if (other.trainer != null)
+				return false;
+		} else if (!trainer.equals(other.trainer))
+			return false;
 		if (users == null) {
 			if (other.users != null)
 				return false;
@@ -132,15 +155,17 @@ public class Training {
 		return true;
 	}
 
+	
+
 	@Override
 	public String toString() {
-        String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
+		String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
         String dateE = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
 		return "Training [id=" + id + ", dateIni=" + dateI + ", dateEnd=" + dateE + ", court=" + court
-				+ ", users=" + users + ", reserve=" + reserve + "]";
+				+ ", trainer=" + trainer + ", users=" + users + ", reserve=" + reserve + "]";
 	}
 
-	public void createReserves(Calendar dateI, Calendar dateE, Court court) {
+	private void createReserves(Calendar dateI, Calendar dateE, Court court) {
 		long dateMilis = dateI.getTimeInMillis();
 		long weekAdd = 1000 * 60 * 60 * 24 * 7;
 		Calendar dateAdd = dateI;
@@ -155,6 +180,10 @@ public class Training {
 		long milisec = dateE.getTimeInMillis() - dateI.getTimeInMillis();
 		int days = (int) milisec / 1000 / 60 / 60 / 24;
 		return days;
+	}
+
+	public void deleteUser(int idU) {
+		users.remove(users.get(idU));
 	}
 
 }
