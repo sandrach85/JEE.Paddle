@@ -31,8 +31,7 @@ public class TrainingDaoITest {
 	@Test
 	public void testFindById(){
 		Training training = (Training) daosService.getMap().get("uT41");
-		System.out.println("------TRAINING------"+training);
-		assertEquals(training , trainingDao.findById(training.getId()));
+		assertTrue(training.getId() == trainingDao.findById(training.getId()).getId());
 	}
 
 	@Test

@@ -56,9 +56,11 @@ public class TrainingDaoImpl implements TrainingExtended {
 
 	@Override
 	public void deleteTrainingAndReserves(int id) {
-		Training training = trainingDao.findById(id);
-		deleteReserves(training.getDateIni(), training.getDateEnd(), training.getCourt());
-		trainingDao.delete(training.getId());
+		if (trainingDao.findById(id) != null) {
+			Training training = trainingDao.findById(id);
+			deleteReserves(training.getDateIni(), training.getDateEnd(), training.getCourt());
+			trainingDao.delete(training.getId());
+		}
 	}
 
 	private void deleteReserves(Calendar dateI, Calendar dateE, Court court) {
@@ -67,8 +69,11 @@ public class TrainingDaoImpl implements TrainingExtended {
 		long weekDel = 1000 * 60 * 60 * 24 * 7;
 
 		for (int i = 0; i < daysBetweenDates(dateI, dateE); i++) {
-			dateDel.setTimeInMillis(dateMilis + (weekDel * i));
-			reserveDao.delete(reserveDao.findByCourtAndDate(court, dateDel));
+			if (reserveDao.findByCourtAndDate(court, dateDel) != null) {
+				dateDel.setTimeInMillis(dateMilis + (weekDel * i));
+				Reserve reserve = reserveDao.findByCourtAndDate(court, dateDel);
+				reserveDao.delete(reserve);
+			}
 		}
 	}
 
