@@ -1,6 +1,7 @@
 package data.entities;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Training {
 	@ManyToOne
 	@JoinColumn
 	private Court court;
-	
+
 	@OneToOne
 	@JoinColumn
 	private User trainer;
@@ -35,9 +36,11 @@ public class Training {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<User> users;
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn
-	private Reserve reserve;
+	private Reserve reserve;*/
+
+	public static final int MAX_USERS = 4;
 
 	public Training() {
 	}
@@ -48,7 +51,9 @@ public class Training {
 		this.dateEnd = dateEnd;
 		this.court = court;
 		this.trainer = trainer;
-		createReserves(dateIni,dateEnd, court);
+		this.users = new ArrayList<User>();
+		//createReserves(dateIni, dateEnd, court);
+		//System.out.println("--------CREO TRAINING----------");
 	}
 
 	public Calendar getDateIni() {
@@ -83,19 +88,17 @@ public class Training {
 		this.users = users;
 	}
 
-	public Reserve getReserve() {
+/*	public Reserve getReserve() {
 		return reserve;
 	}
 
 	public void setReserve(Reserve reserve) {
 		this.reserve = reserve;
-	}
+	}*/
 
 	public int getId() {
 		return id;
 	}
-	
-	
 
 	public User getTrainer() {
 		return trainer;
@@ -105,7 +108,6 @@ public class Training {
 		this.trainer = trainer;
 	}
 
-	
 	@Override
 	public int hashCode() {
 		return id;
@@ -137,11 +139,11 @@ public class Training {
 			return false;
 		if (id != other.id)
 			return false;
-		if (reserve == null) {
+/*		if (reserve == null) {
 			if (other.reserve != null)
 				return false;
 		} else if (!reserve.equals(other.reserve))
-			return false;
+			return false;*/
 		if (trainer == null) {
 			if (other.trainer != null)
 				return false;
@@ -155,31 +157,20 @@ public class Training {
 		return true;
 	}
 
-	
-
 	@Override
 	public String toString() {
 		String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
-        String dateE = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
-		return "Training [id=" + id + ", dateIni=" + dateI + ", dateEnd=" + dateE + ", court=" + court
-				+ ", trainer=" + trainer + ", users=" + users + ", reserve=" + reserve + "]";
+		String dateE = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
+		return "Training [id=" + id + ", dateIni=" + dateI + ", dateEnd=" + dateE + ", court=" + court + ", trainer="
+				+ trainer + ", users=" + users + /*", reserve=" + reserve +*/ "]";
 	}
 
-	private void createReserves(Calendar dateI, Calendar dateE, Court court) {
-		long dateMilis = dateI.getTimeInMillis();
-		long weekAdd = 1000 * 60 * 60 * 24 * 7;
-		Calendar dateAdd = dateI;
 
-		for (int i = 0; i < daysBetweenDates(dateI, dateE); i++) {
-			dateAdd.setTimeInMillis(dateMilis + (weekAdd * i));
-			reserve = new Reserve(court, dateAdd);
+
+	public void addUserInTraining(User user) {
+		if (this.users.size() < Training.MAX_USERS) {
+			this.users.add(user);
 		}
-	}
-
-	public int daysBetweenDates(Calendar dateI, Calendar dateE) {
-		long milisec = dateE.getTimeInMillis() - dateI.getTimeInMillis();
-		int days = (int) milisec / 1000 / 60 / 60 / 24;
-		return days;
 	}
 
 	public void deleteUser(int idU) {
