@@ -1,6 +1,5 @@
 package data.daos;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -51,14 +50,10 @@ public class DaosService {
     public void populate() {
         map = new HashMap<>();
         User[] users = this.createPlayers(0, 8);
-    //    User[] trainers = this.createTrainers(0, 4);
         
         for (User user : users) {
             map.put(user.getUsername(), user);
         }
-     /*   for (User trainer : trainers) {
-            map.put("TT"+trainer.getUsername(), trainer);
-        }*/
         for (Token token : this.createTokens(users)) {
             map.put("t" + token.getUser().getUsername(), token);
         }
@@ -77,7 +72,7 @@ public class DaosService {
             reserveDao.save(new Reserve(courtDao.findOne(i+1), users[i], date));
         }
         for (Training training : this.createTraining(0, 4)){
-        	map.put(training.getTrainer().getUsername(), training);
+        	map.put(training.getTrainer().getUsername()+training.getId(), training);
         }
         AddUsersInTraining(2, 3, 4, 1);
     }
@@ -91,15 +86,11 @@ public class DaosService {
     	Calendar date2 = Calendar.getInstance();
 		
     	for (int i =0; i < size; i++){
-    		date2.set(date1.get(Calendar.YEAR), (date1.get(Calendar.MONTH)+1), date1.get(Calendar.DATE), date1.get(Calendar.HOUR_OF_DAY), date1.get(Calendar.MINUTE));
-    		String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(date2.getTime());
-    		System.out.println(dateI);
-    		
+    		date2.set(date1.get(Calendar.YEAR), (date1.get(Calendar.MONTH)+1), date1.get(Calendar.DATE), date1.get(Calendar.HOUR_OF_DAY), date1.get(Calendar.MINUTE));    		
     		training[i] = trainingDao.createTraining(date1, date2, court.get(i), user.get(i+5), i);
     		training[i].addUserInTraining(user.get(i));
     		training[i].addUserInTraining(user.get(i+1));
     		training[i].addUserInTraining(user.get(i+2));
-			System.out.println("------RELLENO TRAINING----"+training[i]);
     		trainingDao.save(training[i]);
     	}
     	return training;
