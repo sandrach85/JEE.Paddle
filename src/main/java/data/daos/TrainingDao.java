@@ -10,13 +10,13 @@ import data.entities.User;
 
 public interface TrainingDao  extends JpaRepository<Training, Integer>, TrainingExtended {
 
-	/*@Query(value="select * from Training", nativeQuery=true)
-	List<Training> findAllTraining();*/
-	
 	@Query("select t.users from Training t where t.id= ?1")
 	List<User> findUsersTraining(int id);
 	
 	Training findById(int id);
+	
+	@Query("select t.trainer from Training t where t.id= ?1")
+	User findIdTrainer(int id);
 	
 	
 }
