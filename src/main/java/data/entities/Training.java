@@ -36,13 +36,10 @@ public class Training {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<User> users;
 
-	/*@ManyToOne
-	@JoinColumn
-	private Reserve reserve;*/
-
 	public static final int MAX_USERS = 4;
 
 	public Training() {
+		this.users = new ArrayList<User>();
 	}
 
 	public Training(Calendar dateIni, Calendar dateEnd, Court court, User trainer) {
@@ -52,8 +49,6 @@ public class Training {
 		this.court = court;
 		this.trainer = trainer;
 		this.users = new ArrayList<User>();
-		//createReserves(dateIni, dateEnd, court);
-		//System.out.println("--------CREO TRAINING----------");
 	}
 
 	public Calendar getDateIni() {
@@ -87,14 +82,6 @@ public class Training {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-
-/*	public Reserve getReserve() {
-		return reserve;
-	}
-
-	public void setReserve(Reserve reserve) {
-		this.reserve = reserve;
-	}*/
 
 	public int getId() {
 		return id;
@@ -139,11 +126,6 @@ public class Training {
 			return false;
 		if (id != other.id)
 			return false;
-/*		if (reserve == null) {
-			if (other.reserve != null)
-				return false;
-		} else if (!reserve.equals(other.reserve))
-			return false;*/
 		if (trainer == null) {
 			if (other.trainer != null)
 				return false;
@@ -162,7 +144,7 @@ public class Training {
 		String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
 		String dateE = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
 		return "Training [id=" + id + ", dateIni=" + dateI + ", dateEnd=" + dateE + ", court=" + court + ", trainer="
-				+ trainer + ", users=" + users + /*", reserve=" + reserve +*/ "]";
+				+ trainer + ", users=" + users + "]";
 	}
 
 
