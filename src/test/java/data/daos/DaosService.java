@@ -121,7 +121,7 @@ public class DaosService {
             authorizationDao.save(new Authorization(users[i], Role.PLAYER));
         }
         for (int i = size/2; i < size; i++) {
-            users[i] = new User("u" +  "T" + (i + initial), "u" + (i + initial) +  "T" + "@gmail.com", "p", Calendar.getInstance());
+            users[i] = new User("u" + (i + initial), "u" + (i + initial) + "@gmail.com", "p", Calendar.getInstance());
             userDao.save(users[i]);
             authorizationDao.save(new Authorization(users[i], Role.TRAINER));
         }
