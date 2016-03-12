@@ -1,0 +1,83 @@
+package business.api;
+
+import java.util.Calendar;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import business.api.exceptions.InvalidDateException;
+import business.api.exceptions.InvalidIntervalTrainingDateFieldException;
+import business.api.exceptions.NotFoundCourtIdException;
+import business.api.exceptions.NotFoundTrainingIdException;
+import business.api.exceptions.NotFoundUserIdException;
+import business.controllers.TrainingController;
+import business.wrapper.TrainingWrapper;
+
+@RestController
+@RequestMapping(Uris.SERVLET_MAP + Uris.TRAINING)
+public class TrainingResource {
+
+    private TrainingController trainingController;
+
+    @Autowired
+    public void setTrainingController(TrainingController trainingController) {
+        this.trainingController = trainingController;
+    }
+
+    @RequestMapping(value = Uris.CREATE_TRAINING, method = RequestMethod.POST)
+    public void createTraining(@RequestBody TrainingWrapper trainingWrapper)
+            throws InvalidDateException, InvalidIntervalTrainingDateFieldException, NotFoundCourtIdException {
+        this.validateFieldDate(trainingWrapper.getDateIni(), trainingWrapper.getDateEnd());
+        this.validateFieldCourtExist(trainingWrapper.getCourt().getCourtId());
+        this.createTraining(trainingWrapper);
+    }
+
+    @RequestMapping(value = Uris.DELETE_TRAINING, method = RequestMethod.DELETE)
+    public void deleteTraining(@RequestParam(required = true) int id) throws NotFoundTrainingIdException {
+        this.validateFieldTraininIdExist(id);
+        this.deleteTraining(id);
+    }
+
+    @RequestMapping(value = Uris.DELETE_TRAINING_PLAYER, method = RequestMethod.DELETE)
+    public void deleteTrainingPlayer(@RequestParam(required = true) int idT, int idP)
+            throws NotFoundTrainingIdException, NotFoundUserIdException {
+        this.validateFieldTraininIdExist(idT);
+        this.validateFiledTrainingPlayerIdExist(idP);
+        this.deleteTrainingPlayer(idT, idP);
+    }
+
+    /////////// validaciones//////////////////
+    private void validateFieldDate(Calendar time1, Calendar time2) throws InvalidDateException, InvalidIntervalTrainingDateFieldException {
+        if (!trainingController.validateTrainingDate(time1)) {
+            throw new InvalidDateException("La fecha no puede ser un día pasado");
+        }
+        if (!trainingController.validateTrainingDate(time2)) {
+            throw new InvalidDateException("La fecha no puede ser un día pasado");
+        }
+        if (!trainingController.validateIntervalTrainingDates(time1, time2)) {
+            throw new InvalidIntervalTrainingDateFieldException("La fecha inicial no puede ser posterior a la final");
+        }
+    }
+
+    private void validateFieldCourtExist(int id) throws NotFoundCourtIdException {
+        if (!trainingController.validateFieldCourtExist(id)) {
+            throw new NotFoundCourtIdException("Pista no encontrada o no disponible");
+        }
+    }
+
+    private void validateFieldTraininIdExist(int id) throws NotFoundTrainingIdException {
+        if (!trainingController.validateFieldTrainingId(id)) {
+            throw new NotFoundTrainingIdException("Id de entrenamiento no encontrado");
+        }
+    }
+
+    private void validateFiledTrainingPlayerIdExist(int id) throws NotFoundUserIdException {
+        if (!trainingController.validateFieldTrainingPlayerId(id)) {
+            throw new NotFoundUserIdException("Id de Jugador no encontrado");
+        }
+    }
+}
