@@ -1,6 +1,8 @@
 package business.controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,6 +63,35 @@ public class TrainingController {
                 trainingDao.deleteUserTraining(idT, idP);
             }
         }
+    }
+    
+    public List<TrainingWrapper> showTraining (){
+        List<TrainingWrapper> trainings = new ArrayList<>();
+        for (Training training : trainingDao.findAll()){
+            trainings.add(new TrainingWrapper(training));
+        }
+        return trainings;
+    }
+    
+    public boolean registerTraining(int idT, int idP){
+        Training training = trainingDao.findById(idT);
+        User player = userDao.findById(idP);
+        if (training != null){
+            if ( player != null ){
+                training.addUserInTraining(player);
+                trainingDao.save(training);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean validateFieldQuotaAvailable(int id){
+        Training training = trainingDao.findById(id);
+        if (training.getUsers().size()<training.MAX_USERS){
+            return true;
+        }
+        return false;
     }
 
     public boolean validateFieldTrainingPlayerId(int id) {

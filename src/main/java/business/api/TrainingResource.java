@@ -1,6 +1,7 @@
 package business.api;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import business.api.exceptions.InvalidDateException;
 import business.api.exceptions.InvalidIntervalTrainingDateFieldException;
+import business.api.exceptions.InvalidTrainingQuotaFull;
 import business.api.exceptions.NotFoundCourtIdException;
 import business.api.exceptions.NotFoundTrainingIdException;
 import business.api.exceptions.NotFoundUserIdException;
@@ -46,12 +48,28 @@ public class TrainingResource {
     public void deleteTrainingPlayer(@RequestParam(required = true) int idT, int idP)
             throws NotFoundTrainingIdException, NotFoundUserIdException {
         this.validateFieldTraininIdExist(idT);
-        this.validateFiledTrainingPlayerIdExist(idP);
+        this.validateFieldTrainingPlayerIdExist(idP);
         this.deleteTrainingPlayer(idT, idP);
     }
 
+    @RequestMapping(value = Uris.SHOW_TRAININGS, method = RequestMethod.GET)
+    public List<TrainingWrapper> showTrainings() {
+        return trainingController.showTraining();
+    }
+
+    @RequestMapping(value = Uris.REGISTER_TRAINING, method = RequestMethod.PUT)
+    public void registerTraining(@RequestParam(required = true) int idT, int idP)
+            throws NotFoundTrainingIdException, NotFoundUserIdException, InvalidTrainingQuotaFull {
+        this.validateFieldTraininIdExist(idT);
+        this.validateFieldTrainingPlayerIdExist(idP);
+        this.validateFieldQuotaAvailableTraining(idT);
+        trainingController.registerTraining(idT, idP);
+
+    }
+
     /////////// validaciones//////////////////
-    private void validateFieldDate(Calendar time1, Calendar time2) throws InvalidDateException, InvalidIntervalTrainingDateFieldException {
+    private void validateFieldDate(Calendar time1, Calendar time2) 
+            throws InvalidDateException, InvalidIntervalTrainingDateFieldException {
         if (!trainingController.validateTrainingDate(time1)) {
             throw new InvalidDateException("La fecha no puede ser un día pasado");
         }
@@ -75,9 +93,15 @@ public class TrainingResource {
         }
     }
 
-    private void validateFiledTrainingPlayerIdExist(int id) throws NotFoundUserIdException {
+    private void validateFieldTrainingPlayerIdExist(int id) throws NotFoundUserIdException {
         if (!trainingController.validateFieldTrainingPlayerId(id)) {
             throw new NotFoundUserIdException("Id de Jugador no encontrado");
+        }
+    }
+    
+    private void validateFieldQuotaAvailableTraining(int id) throws InvalidTrainingQuotaFull {
+        if (!trainingController.validateFieldQuotaAvailable(id)){
+            throw new InvalidTrainingQuotaFull("Grupo completo de alumnos");
         }
     }
 }
