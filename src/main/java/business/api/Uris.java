@@ -2,7 +2,7 @@ package business.api;
 
 public class Uris {
 
-    public static final String SERVLET_MAP = "/api/v0";
+    public static final String SERVLET_MAP = "http://localhost:8080/JEE.Paddle.0.0.1-SNAPSHOT/api/v0";
 
     public static final String ID = "/{id}";
 
