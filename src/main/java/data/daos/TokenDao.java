@@ -14,4 +14,6 @@ public interface TokenDao extends JpaRepository<Token, Integer>, TokenExtended {
     
     @Query(value="select * from Token", nativeQuery=true)
     List<Token> findAllToken();
+    
+    Token findByValue(String value);
 }
