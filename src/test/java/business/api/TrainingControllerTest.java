@@ -59,5 +59,26 @@ public class TrainingControllerTest {
 		trainingController.deleteTraining(training.getId());
 		assertNull(trainingDao.findById(training.getId()));
 	}
+	
+	@Test
+	public void testDeleteTrainingPlayer(){
+		assertTrue(trainingDao.findUserInTraining(1, 2)!=null);
+		trainingController.deleteTrainingPlayer(1, 2);
+		assertTrue(trainingDao.findUserInTraining(1, 2)==null);
+	}
+	
+	@Test
+	public void testShowTraining(){
+		int numTrainingDao = trainingDao.findAll().size();
+		int numTrainingController = trainingController.showTraining().size();
+		assertEquals(numTrainingDao, numTrainingController);
+	}
+	
+	@Test
+	public void testRegisterTraining(){
+		assertTrue(trainingDao.findUserInTraining(1, 5)==null);
+		trainingController.registerTraining(1, 5);
+		assertTrue(trainingDao.findUserInTraining(1, 5)!=null);
+	}
 
 }
