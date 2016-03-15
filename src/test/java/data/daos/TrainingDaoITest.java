@@ -57,7 +57,7 @@ public class TrainingDaoITest {
     public void testDeleteUserTraining() {
         Training training = (Training) daosService.getMap().get("u41");
         List<User> usersBef = trainingDao.findUsersTraining(training.getId());
-        trainingDao.deleteUserTraining(training.getId(), 2);
+        trainingDao.deleteUserTraining(training.getId(), 3);
         List<User> usersAft = trainingDao.findUsersTraining(training.getId());
         assertTrue(usersBef != usersAft);
     }

@@ -27,10 +27,9 @@ public class TrainingTest {
 	@Test
 	public void testDeleteUser(){
 		User user = new User();
-		int id = user.getId();
 		training.addUserInTraining(user);
 		assertTrue(1==training.getUsers().size());
-		training.deleteUser(id);
+		training.deleteUser(user);
 		assertTrue(0==training.getUsers().size());
 	}
 }

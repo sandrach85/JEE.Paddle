@@ -153,8 +153,8 @@ public class Training {
         }
     }
 
-    public void deleteUser(int idU) {
-        users.remove(users.get(idU));
+    public void deleteUser(User user) {
+        users.remove(user);
     }
 
 }

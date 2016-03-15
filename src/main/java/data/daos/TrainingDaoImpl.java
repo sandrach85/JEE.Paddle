@@ -44,14 +44,12 @@ public class TrainingDaoImpl implements TrainingExtended {
 
 	@Override
 	public boolean deleteUserTraining(int idT, int idU) {
-		List<User> listUsers = trainingDao.findUsersTraining(idT);
+		User user = trainingDao.findUserInTraining(idT, idU);
 		Training training = trainingDao.findById(idT);
-		for (int i = 0; i < listUsers.size(); i++) {
-			if (listUsers.get(i).getId() == idU) {
-				training.deleteUser(idU);
-				trainingDao.save(training);
-				return true;
-			}
+		if (user!=null){
+			training.deleteUser(user);
+			trainingDao.save(training);
+			return true;
 		}
 		return false;
 	}
