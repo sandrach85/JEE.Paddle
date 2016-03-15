@@ -39,11 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/**").permitAll()
                 //.antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/**").authenticated()
                 .antMatchers(Uris.SERVLET_MAP + Uris.COURTS + "/**").hasRole(Role.ADMIN.name())//
-                //.antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/showTrainings").hasRole(Role.PLAYER.name())
-                //.antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/registerTraining").hasRole(Role.PLAYER.name())
+                .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/showTrainings").hasRole(Role.PLAYER.name())
+                .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/registerTraining").hasRole(Role.PLAYER.name())
                 .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/createTraining").hasRole(Role.TRAINER.name())
-                //.antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/deleteTraining").hasRole(Role.TRAINER.name())
-                //.antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/deleteTrainingPlayer").hasRole(Role.TRAINER.name())
+                .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/deleteTraining").hasRole(Role.TRAINER.name())
+                .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/deleteTrainingPlayer").hasRole(Role.TRAINER.name())
                 .and().httpBasic();
     }
 

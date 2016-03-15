@@ -36,7 +36,6 @@ public class TrainingControllerTest {
 
 	@Test
 	public void testCreateTraining() {
-
 		Calendar date1 = Calendar.getInstance();
 		Calendar date2 = Calendar.getInstance();
 		date2.set(date1.get(Calendar.YEAR), date1.get(Calendar.MONTH) + 2, date1.get(Calendar.DATE),
@@ -45,7 +44,6 @@ public class TrainingControllerTest {
 		User u1 = (User) daosService.getMap().get("u6");
 		UserWrapper userWrapper = new UserWrapper(u1.getUsername(), u1.getEmail(), u1.getPassword(), u1.getBirthDate());
 		TrainingWrapper trainingWrapper = new TrainingWrapper(date1, date2, court, userWrapper);
-		System.out.println("----------------"+trainingWrapper.toString());
 		
 		assertNull(trainingDao.findById(4));
 		trainingController.createTraining(trainingWrapper);
