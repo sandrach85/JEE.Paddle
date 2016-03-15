@@ -43,15 +43,17 @@ public class TrainingDaoImpl implements TrainingExtended {
 	}
 
 	@Override
-	public void deleteUserTraining(int idT, int idU) {
+	public boolean deleteUserTraining(int idT, int idU) {
 		List<User> listUsers = trainingDao.findUsersTraining(idT);
 		Training training = trainingDao.findById(idT);
 		for (int i = 0; i < listUsers.size(); i++) {
 			if (listUsers.get(i).getId() == idU) {
 				training.deleteUser(idU);
 				trainingDao.save(training);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override
@@ -61,6 +63,19 @@ public class TrainingDaoImpl implements TrainingExtended {
 			deleteReserves(training.getDateIni(), training.getDateEnd(), training.getCourt());
 			trainingDao.delete(training.getId());
 		}
+	}
+	
+	@Override
+	public User findUserInTraining(int idT, int idU) {
+		List<User> listUsers = trainingDao.findUsersTraining(idT);
+		if (listUsers.size() > 0) {
+			for (int i = 0; i < listUsers.size(); i++) {
+				if (listUsers.get(i).getId() == idU) {
+					return listUsers.get(i);
+				}
+			}
+		}
+		return null;
 	}
 
 	private void deleteReserves(Calendar dateI, Calendar dateE, Court court) {
