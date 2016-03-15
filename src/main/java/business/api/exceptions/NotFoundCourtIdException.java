@@ -6,7 +6,7 @@ public class NotFoundCourtIdException extends ApiException {
 
     public static final String DESCRIPTION = "La pista referenciada no existe";
 
-    public static final int CODE = 1;
+    public static final int CODE = 333;
 
     public NotFoundCourtIdException() {
         this("");

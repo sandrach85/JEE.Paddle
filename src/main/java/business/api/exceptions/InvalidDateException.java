@@ -6,7 +6,7 @@ public class InvalidDateException extends ApiException {
 
     public static final String DESCRIPTION = "Fecha no válida";
 
-    public static final int CODE = 1;
+    public static final int CODE = 401;
 
     public InvalidDateException() {
         this("");
