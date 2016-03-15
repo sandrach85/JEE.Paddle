@@ -57,13 +57,12 @@ public class TrainingController {
 	}
 
 	public void deleteTrainingPlayer(int idT, int idP) {
-		Training training = trainingDao.findById(idT);
-		User player = userDao.findById(idP);
-		if (training != null) {
-			if (player != null) {
-				trainingDao.deleteUserTraining(idT, idP);
-			}
+		User player = trainingDao.findUserInTraining(idT, idP);
+		if (player != null) {
+			System.out.println("mi usuario es:"+player.toString());
+			trainingDao.deleteUserTraining(idT, idP);
 		}
+		System.out.println("salgo despues de borrar");
 	}
 
 	public List<TrainingWrapper> showTraining() {
