@@ -41,5 +41,15 @@ public class Populate {
             authorizationDao.save(new Authorization(admin, Role.ADMIN));
         }
     }
+    
+    public void createDefaultTrainer() {
+        User trainer = new User(environment.getProperty("trainer.username"), environment.getProperty("trainer.email"),
+                environment.getProperty("trainer.password"), new GregorianCalendar(1985, 01, 04));
+        User trainerSaved = userDao.findByUsernameOrEmail(trainer.getUsername());
+        if (trainerSaved == null) {
+            userDao.save(trainer);
+            authorizationDao.save(new Authorization(trainer, Role.TRAINER));
+        }
+    }
 
 }
