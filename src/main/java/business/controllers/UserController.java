@@ -28,14 +28,15 @@ public class UserController {
     }
 
     public boolean registration(UserWrapper userWrapper) {
-        User user = new User(userWrapper.getUsername(), userWrapper.getEmail(), userWrapper.getPassword(), userWrapper.getBirthDate());
-        try {
+        if (null == userDao.findByUsernameOrEmail(userWrapper.getUsername())
+                && null == userDao.findByUsernameOrEmail(userWrapper.getEmail())) {
+            User user = new User(userWrapper.getUsername(), userWrapper.getEmail(), userWrapper.getPassword(), userWrapper.getBirthDate());
             userDao.save(user);
             authorizationDao.save(new Authorization(user, Role.PLAYER));
-        } catch (Exception e) {
+            return true;
+        } else {
             return false;
         }
-        return true;
     }
 
 }
