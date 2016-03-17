@@ -81,8 +81,8 @@ public class TrainingWrapper {
 
     @Override
     public String toString() {
-        String dateIniString = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
-        String dateEndString = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
+        String dateIniString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(dateIni.getTime());
+        String dateEndString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(dateEnd.getTime());
         return "TrainingWrapper [dateIni=" + dateIniString + ", dateEnd=" + dateEndString + ", court=" + court + ", trainer=" + trainer
                 + ", users=" + users + "]";
     }

@@ -141,8 +141,8 @@ public class Training {
 
     @Override
     public String toString() {
-        String dateI = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateIni.getTime());
-        String dateE = new SimpleDateFormat("dd-MMM-yyyy HH:mm").format(dateEnd.getTime());
+        String dateI = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(dateIni.getTime());
+        String dateE = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(dateEnd.getTime());
         return "Training [id=" + id + ", dateIni=" + dateI + ", dateEnd=" + dateE + ", court=" + court + ", trainer=" + trainer + ", users="
                 + users + "]";
     }
