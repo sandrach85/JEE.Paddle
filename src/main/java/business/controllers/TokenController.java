@@ -31,11 +31,7 @@ public class TokenController {
     public String login(String username) {
         User user = userDao.findByUsernameOrEmail(username);
         assert user != null;
-        Token token = tokenDao.findByUser(user);
-        if (token != null) {
-            tokenDao.delete(token);
-        }
-        token = new Token(user);
+        Token token = new Token(user);
         tokenDao.save(token);
         return token.getValue();
     }
