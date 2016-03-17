@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -21,6 +22,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("*").maxAge(3600);
 	}
+	
+	// Web presenters
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+    }
 	
     @Bean
     public ViewResolver jspViewResolver() {

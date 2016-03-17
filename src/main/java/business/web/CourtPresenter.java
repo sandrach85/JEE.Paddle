@@ -20,6 +20,13 @@ public class CourtPresenter {
 	public CourtPresenter(){
 		
 	}
+	
+	@RequestMapping("/home")
+    public String home(Model model) {
+        //model.addAttribute("themes", THEMES);
+        //La vista resultante no lleva extensión (.jsp) configurado en WebConfig.java
+        return "/home";
+    }
 
 	@RequestMapping("/list-courts")
 	public String listCourts(Model model){
@@ -29,17 +36,17 @@ public class CourtPresenter {
 	
 	@RequestMapping(value ="/create-court", method = RequestMethod.GET)
 	public String createCourt(Model model){
-		int numCourts = courtController.showCourts().size();
-        model.addAttribute("court", new CourtState(numCourts+1, true));
+        model.addAttribute("court", new CourtState(courtController.showCourts().size()+1, true));
         return "createCourt";
 	}
 	
 	@RequestMapping(value = "/create-court", method = RequestMethod.POST)
 	public String createUserSubmit(@ModelAttribute(value="court") CourtState court, Model model){
 		courtController.createCourt(court.getCourtId());
-		int numCourts = courtController.showCourts().size();
-        model.addAttribute("court", new CourtState(numCourts+1, true));
-		return "createCourt";
+		//int numCourts = courtController.showCourts().size();
+        //model.addAttribute("court", new CourtState(numCourts+1, true));
+		this.createCourt(model);
+		return "/createCourtSuccess";
 		
 	}
 }
