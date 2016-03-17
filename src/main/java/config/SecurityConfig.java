@@ -3,6 +3,7 @@ package config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(Uris.SERVLET_MAP + Uris.TOKENS + "/**").authenticated()
                 .antMatchers(Uris.SERVLET_MAP + Uris.COURTS + "/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, Uris.SERVLET_MAP + Uris.RESERVES + "/**").hasRole(Role.PLAYER.name())
                 .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/showTrainings").hasRole(Role.PLAYER.name())
                 .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/registerTraining").hasRole(Role.PLAYER.name())
                 .antMatchers(Uris.SERVLET_MAP + Uris.TRAINING + "/createTraining").hasRole(Role.TRAINER.name())
