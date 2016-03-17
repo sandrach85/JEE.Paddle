@@ -44,7 +44,7 @@ public class Populate {
     
     public void createDefaultTrainer() {
         User trainer = new User(environment.getProperty("trainer.username"), environment.getProperty("trainer.email"),
-                environment.getProperty("trainer.password"), new GregorianCalendar(1985, 01, 04));
+                environment.getProperty("trainer.password"), new GregorianCalendar(1979, 07, 22));
         User trainerSaved = userDao.findByUsernameOrEmail(trainer.getUsername());
         if (trainerSaved == null) {
             userDao.save(trainer);
