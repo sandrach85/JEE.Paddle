@@ -38,6 +38,7 @@ public class GenericService {
         courtDao.deleteAll();
         userDao.deleteAll();
         populate.createDefaultAdmin();
+        populate.createDefaultTrainer();
     }
 
 }
