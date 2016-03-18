@@ -13,14 +13,18 @@ public class UserDaoImpl implements UserExtended {
 	@Autowired
 	private TokenDao tokenDao;
 
-	@Override
-	public User findByTokenValueNoExpired(String tokenValue) {
-		User user = userDao.findByTokenValue(tokenValue);
-		Token token = tokenDao.findByValue(tokenValue);
-		if (!token.isValid()) {
-			return null;
-		}
-		return user;
-	}
+    @Override
+    public User findByTokenValueNoExpired(String tokenValue) {
+        User user = userDao.findByTokenValue(tokenValue);
+        if (user != null) {
+            Token token = tokenDao.findByUser(user);
+            if (token != null) {
+                if (token.isValid()) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
 
 }
