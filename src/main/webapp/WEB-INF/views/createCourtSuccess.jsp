@@ -40,13 +40,39 @@
 				</div>
 			</nav>
 
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-10">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-8">
+								<div class="panel-group">
+									<div class="panel-group">
+										<div class="panel panel-default">
+											<div class="panel panel-success">
+												<div class="panel-heading">
+													<strong>Creación de pista correcta</strong>
+												</div>
+												<div class="panel-body">
+													<h3>La pista (${court.courtId-1}) ha sido creada
+														satisfactoriamente</h3>
+												</div>
+												<div class="panel-footer">
+													<p>
+														<a href="<c:url value='/list-courts' />">Ir a Lista de
+															Pistas</a>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-<H1>Creación de pista correcta</H1>
-
-	<h3>La pista (${court.courtId-1}) ha sido creada satisfactoriamente</h3>
-
-	<p><a href="<c:url value='/list-courts' />">Ir a Lista de Pistas</a></p>
-
 </body>
 </html>
